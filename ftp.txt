@@ -1,0 +1,77 @@
+1.Edit the vsftpd configuration file:
+# vim /etc/vsftpd.conf
+
+2.Modify the configuration file:
+If anonymous_enable is set to NO, change it to YES. If it is already YES, leave it as is.
+anonymous_enable=YES
+
+3.Check the vsftpd server status:
+# systemctl status vsftpd
+
+4.If the service is inactive, start it:
+# systemctl start vsftpd
+
+
+5.Create a test file in the FTP directory:
+# vim /var/ftp/pub/d.txt
+
+6.Connect to the FTP server using an FTP client:
+# ftp 192.168.1.42
+Use ftp as both the username and password when prompted.
+
+7.List all files in the current directory:
+ftp> dir
+
+8.Change directory to pub:
+ftp> cd pub
+
+9.List all files in the pub directory:
+ftp> dir
+
+10.Download the file from the server:
+ftp> get d.txt
+
+11.Logout from the FTP server:
+ftp> bye
+
+12.Check if the file is downloaded:
+# ls -l
+
+13.Edit the vsftpd configuration file again to enable uploads:
+# vim /etc/vsftpd.conf
+
+14.Add or ensure the following lines are in the configuration file:
+anon_upload_enable=YES
+chown_uploads=YES
+chown_username=daemon
+anon_umask=077
+
+15.Create an upload directory and set permissions:
+# mkdir /var/ftp/pub/upload
+# chmod 730 /var/ftp/pub/upload
+# chgrp daemon /var/ftp/pub/upload
+
+16.Restart the vsftpd service to apply changes:
+# systemctl restart vsftpd
+
+17.Check the directory listing to confirm the setup:
+# ls -l /var/ftp/pub/upload
+
+18.Connect to the FTP server again:
+# ftp 192.168.1.42
+Use ftp as both the username and password when prompted.
+
+19.List all files in the current directory:
+ftp> dir
+
+20.Change directory to upload:
+ftp> cd upload
+
+21.Upload the file to the server:
+ftp> put d.txt
+
+22.Logout from the FTP server:
+ftp> bye
+
+23.Check the directory listing to confirm the file upload:
+# ls -l /var/ftp/pub/upload/
